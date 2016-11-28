@@ -18,6 +18,15 @@ Docker0 bridge
 Through ``docker network`` command we can get more details about the docker0 bridge, and from the output, we can see there is no Container
 connected with the bridge now.
 
+
+.. code-block:: bash
+
+  $ docker network ls
+  NETWORK ID          NAME                DRIVER
+  32b93b141bae        bridge              bridge
+  c363d9a92877        host                host
+  88077db743a8        none                null
+  
 .. code-block:: bash
 
   $ docker network inspect 32b93b141bae
