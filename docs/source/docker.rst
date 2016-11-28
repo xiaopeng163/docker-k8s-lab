@@ -2,9 +2,10 @@ Docker
 =======
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    docker/install
+   docker/basic-network
    docker/docker-machine
    docker/docker-swarm
    docker/docker-compose

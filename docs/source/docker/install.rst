@@ -1,9 +1,13 @@
 Installation
 =============
 
-Most of the time, we talk about Docker, it means Docker Engine. It's a lightweight and powerful
-open source containerization technology combined with a work flow for building and containerizing your applications.
+When people say “Docker” they typically mean Docker Engine, the client-server application
+made up of the Docker daemon, a REST API that specifies interfaces for interacting with the daemon,
+and a command line interface (CLI) client that talks to the daemon (through the REST API wrapper).
+Docker Engine accepts docker commands from the CLI, such as docker run <image>, docker ps to list running containers,
+docker images to list images, and so on [#f3]_.
 
+By default, the docker engine and command line interface will be installed together in the same host.
 
 Install Docker Engine on Linux
 ------------------------------
@@ -122,6 +126,6 @@ Then logout current user, and login again. You can use docker command from your 
 
 .. rubric:: Reference
 
-
+.. [#f3] https://docs.docker.com/machine/overview/
 .. [#f1] https://docs.docker.com/engine/installation/linux/centos/
 .. [#f2] http://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
