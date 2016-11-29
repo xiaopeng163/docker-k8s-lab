@@ -1,4 +1,4 @@
-Installation
+Docker Engine
 =============
 
 When people say “Docker” they typically mean Docker Engine, the client-server application
@@ -8,6 +8,11 @@ Docker Engine accepts docker commands from the CLI, such as docker run <image>, 
 docker images to list images, and so on [#f3]_.
 
 By default, the docker engine and command line interface will be installed together in the same host.
+
+.. note::
+
+  Because docker's quick development, and docker's compatibility issue [#f4]_, we recommand you chose the verion > 1.10.0. And all the labs in this handbook, I use
+  version 1.11.x and 1.12.x
 
 Install Docker Engine on Linux
 ------------------------------
@@ -61,10 +66,12 @@ This script adds the docker.repo repository and installs Docker.
 Install Docker Engine on Mac
 ----------------------------
 
+For the requirements and how to install ``Docker Toolbox`` on Mac, please go the reference link [#f5]_.
 
 Install Docker Engine on Windows
 --------------------------------
 
+For the requirements and how to install ``Docker Toolbox`` on Windows, please go to the reference link [#f6]_.
 
 Docker Version
 --------------
@@ -88,6 +95,8 @@ Docker Version
    Built:        Wed Jun  1 21:23:11 2016
    OS/Arch:      linux/amd64
 
+Because there may have backwards incompatibilities if the versions of the client and server are different. We recommand that you should use the same version
+for client and server.
 
 Docker without sudo
 --------------------
@@ -124,8 +133,12 @@ Then logout current user, and login again. You can use docker command from your 
 
 
 
-.. rubric:: Reference
+Reference
+----------
 
 .. [#f3] https://docs.docker.com/machine/overview/
 .. [#f1] https://docs.docker.com/engine/installation/linux/centos/
 .. [#f2] http://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
+.. [#f4] https://success.docker.com/Policies/Compatibility_Matrix
+.. [#f5] https://docs.docker.com/engine/installation/mac/
+.. [#f6] https://docs.docker.com/engine/installation/windows/

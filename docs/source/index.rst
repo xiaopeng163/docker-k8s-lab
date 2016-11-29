@@ -19,6 +19,7 @@ Contents:
 
    docker
    kubernetes
+   coreos
 
 Feedback
 ========

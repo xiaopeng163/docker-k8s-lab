@@ -15,6 +15,27 @@ There are four importance concepts about bridged networking:
 Docker0 bridge
 --------------
 
+Docker version for this lab:
+
+.. code-block:: bash
+
+  $ docker version
+  Client:
+   Version:      1.11.2
+   API version:  1.23
+   Go version:   go1.5.4
+   Git commit:   b9f10c9
+   Built:        Wed Jun  1 21:23:11 2016
+   OS/Arch:      linux/amd64
+
+  Server:
+   Version:      1.11.2
+   API version:  1.23
+   Go version:   go1.5.4
+   Git commit:   b9f10c9
+   Built:        Wed Jun  1 21:23:11 2016
+   OS/Arch:      linux/amd64
+
 Through ``docker network`` command we can get more details about the docker0 bridge, and from the output, we can see there is no Container
 connected with the bridge now.
 
@@ -26,7 +47,7 @@ connected with the bridge now.
   32b93b141bae        bridge              bridge
   c363d9a92877        host                host
   88077db743a8        none                null
-  
+
 .. code-block:: bash
 
   $ docker network inspect 32b93b141bae
@@ -85,7 +106,8 @@ You can also use ``brctl`` command to get brige docker0 information
 
 .. note::
 
-  If you can't find ``brctl`` command, you should install it, for centos, please use ``sudo yum install bridge-utils``.
+  If you can't find ``brctl`` command, you can install it. For CentOS, please use ``sudo yum install bridge-utils``. For Ubuntu,
+  please use ``apt-get install bridge-utils``
 
 
 Veth Pair
@@ -190,3 +212,56 @@ After all is done, please remove ``/var/run/netns/3090``.
 
 External Communication
 ----------------------
+
+All containers connected with brige ``docker0`` can communicate with the external network or other containers which
+connected with the same brige.
+
+Let's start two containers:
+
+.. code-block:: bash
+
+  $ docker run -d --name test2 centos:7 /bin/bash -c "while true; do sleep 3600; done"
+  8975cb01d142271d463ec8dac43ea7586f509735d4648203319d28d46365af2f
+  $ docker ps
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+  8975cb01d142        centos:7            "/bin/bash -c 'while "   4 seconds ago       Up 4 seconds                            test2
+  4fea95f2e979        centos:7            "/bin/bash -c 'while "   27 hours ago        Up 26 hours                             test1
+
+And from the brige ``docker0``, we can see two interfaces connected.
+
+.. code-block:: bash
+
+  $ brctl show
+  bridge name     bridge id               STP enabled     interfaces
+  docker0         8000.0242d623e618       no              veth6a5ae6f
+                                                          vethc16e6c8
+  $ ip link
+  1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT
+      link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+  2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 qdisc pfifo_fast state UP mode DEFAULT qlen 1000
+      link/ether 06:95:4a:1f:08:7f brd ff:ff:ff:ff:ff:ff
+  3: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT
+      link/ether 02:42:d6:23:e6:18 brd ff:ff:ff:ff:ff:ff
+  27: veth6a5ae6f@if26: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT
+      link/ether 02:7d:eb:4e:85:99 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+  31: vethc16e6c8@if30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT
+      link/ether d2:9f:2e:ca:22:a5 brd ff:ff:ff:ff:ff:ff link-netnsid 1
+
+The two containers can be reached by each other
+
+.. code-block:: bash
+
+  $  docker inspect --format '{{.NetworkSettings.IPAddress}}' test1
+  172.17.0.2
+  $  docker inspect --format '{{.NetworkSettings.IPAddress}}' test2
+  172.17.0.3
+  $ docker exec test1 bash -c 'ping 172.17.0.3'
+  PING 172.17.0.3 (172.17.0.3) 56(84) bytes of data.
+  64 bytes from 172.17.0.3: icmp_seq=1 ttl=64 time=0.051 ms
+  64 bytes from 172.17.0.3: icmp_seq=2 ttl=64 time=0.058 ms
+  64 bytes from 172.17.0.3: icmp_seq=3 ttl=64 time=0.053 ms
+  ^C
+
+The basic network would be like below:
+
+.. image:: _image/two-container-network.png
