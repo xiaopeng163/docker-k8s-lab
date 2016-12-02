@@ -1,5 +1,5 @@
-Bridge Networking
-==================
+Bridge Networking Deep Dive
+===========================
 
 The bridge network represents the docker0 network present in all Docker installations. Unless you specify otherwise with
 the ``docker run --network=<NETWORK> option``, the Docker daemon connects containers to this network by default.
