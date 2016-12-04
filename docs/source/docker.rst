@@ -4,6 +4,7 @@ Docker
 .. toctree::
    :maxdepth: 1
 
+   docker/lab-environment
    docker/docker-engine
    docker/docker-cli
    docker/docker-network

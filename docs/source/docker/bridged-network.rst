@@ -267,9 +267,59 @@ The basic network would be like below:
 .. image:: _image/two-container-network.png
 
 
-DHCP
+CNM
 ~~~~
 
+To understand how container get its ip address, you should understand what is CNM (Container Network Model) [#f2]_.
+
+Libnetwork implements Container Network Model (CNM) which formalizes the steps required to provide networking for
+containers while providing an abstraction that can be used to support multiple network drivers.
+
+During the Network and Endpoints lifecycle, the CNM model controls the IP address assignment for network
+and endpoint interfaces via the IPAM driver(s) [#f1]_.
+
+When creating the bridge ``docker0``,  libnetwork will do some request to IPAM driver, something like network gateway, address
+pool. When creating a container, in the network sandbox, and endpoint was created, libnetwork will request an IPv4 address from
+the IPv4 pool and assign it to the endpoint interface IPv4 address.
+
+.. image:: _image/cnm-model.jpg
 
 NAT
 ~~~
+
+Container in bridge network mode can access the external network through ``NAT`` which configured by ``iptables``. From the
+docker host, we can see:
+
+.. code-block:: bash
+
+  $ sudo iptables --list -t nat
+  Chain PREROUTING (policy ACCEPT)
+  target     prot opt source               destination
+  DOCKER     all  --  anywhere             anywhere             ADDRTYPE match dst-type LOCAL
+
+  Chain INPUT (policy ACCEPT)
+  target     prot opt source               destination
+
+  Chain OUTPUT (policy ACCEPT)
+  target     prot opt source               destination
+  DOCKER     all  --  anywhere            !loopback/8           ADDRTYPE match dst-type LOCAL
+
+  Chain POSTROUTING (policy ACCEPT)
+  target     prot opt source               destination
+  MASQUERADE  all  --  172.17.0.0/16  anywhere
+
+  Chain DOCKER (2 references)
+  target     prot opt source               destination
+  RETURN     all  --  anywhere             anywhere
+
+
+For NAT with iptables, you can reference [#f3]_ [#f4]_
+
+
+Reference
+----------
+
+.. [#f1] https://github.com/docker/libnetwork/blob/master/docs/ipam.md
+.. [#f2] https://github.com/docker/libnetwork/blob/master/docs/design.md
+.. [#f3] http://www.karlrupp.net/en/computer/nat_tutorial
+.. [#f4] https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Security_Guide/s1-firewall-ipt-fwd.html
