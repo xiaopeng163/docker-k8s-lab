@@ -126,3 +126,48 @@ Start a container in background
   92848c122db6        ubuntu:14.04        "/bin/bash"              13 seconds ago      Exited (0) 12 seconds ago                       test3
   8975cb01d142        centos:7            "/bin/bash -c 'while "   24 hours ago        Up 24 hours                                     test2
   4fea95f2e979        centos:7            "/bin/bash -c 'while "   2 days ago          Up 2 days                                       test1
+
+
+
+docker ps
+---------
+
+``docker ps`` will list all running containers, and ``docker ps -a`` will list all containers include exited.
+
+.. code-block:: bash
+
+  $ docker ps
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+  4fea95f2e979        centos:7            "/bin/bash -c 'while "   6 days ago          Up 3 seconds                            test1
+  $ docker ps -a
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+  c05d6d379459        centos:7            "/bin/bash -c 'while "   3 days ago          Exited (137) 11 hours ago                       test3
+  8975cb01d142        centos:7            "/bin/bash -c 'while "   5 days ago          Exited (137) 3 days ago                         test2
+  4fea95f2e979        centos:7            "/bin/bash -c 'while "   6 days ago          Up 6 seconds                                    test1
+
+Sometime, we want to manage multiple containers each time,  like ``start``, ``stop``, ``rm``.
+
+Firstly, we can use ``--filter`` to filter out the containers we want to manage.
+
+.. code-block:: bash
+
+  $ docker ps -a --filter "status=exited"
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+  c05d6d379459        centos:7            "/bin/bash -c 'while "   3 days ago          Exited (137) 11 hours ago                       test3
+  8975cb01d142        centos:7            "/bin/bash -c 'while "   5 days ago          Exited (137) 3 days ago                         test2
+
+Secondly, we can use ``-q`` option to list only containers ids
+
+.. code-block:: bash
+
+  $ docker ps -aq --filter "status=exited"
+  c05d6d379459
+  8975cb01d142
+
+At last, we can batch processing these containers, like remove them all or start them all:
+
+.. code-block:: bash
+
+  $ docker rm $(docker ps -aq --filter "status=exited")
+  c05d6d379459
+  8975cb01d142
