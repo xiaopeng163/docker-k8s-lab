@@ -5,7 +5,7 @@ Please install vagrant before using vagrant files to quick start.
 
 Download link: https://www.vagrantup.com/downloads.html
 
-For what vagrant is and how to use it, please reference https://www.vagrantup.com/docs/
+For what vagrant is and how to use it with virtualbox and vmware fusion, please reference https://www.vagrantup.com/docs/
 
 Vagrant with two node docker engine
 -----------------------------------
