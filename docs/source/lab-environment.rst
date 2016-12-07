@@ -61,7 +61,19 @@ We can use ``vagrant ssh`` to access each node:
 
 
   Last login: Mon Dec  5 05:46:16 2016 from 10.0.2.2
-  ubuntu@docker-node1:~$ sudo docker run -d --name test1 hello-world
-
+  ubuntu@docker-node1:~$ docker run -d --name test2 hello-world
+  Unable to find image 'hello-world:latest' locally
+  latest: Pulling from library/hello-world
+  c04b14da8d14: Pull complete
+  Digest: sha256:0256e8a36e2070f7bf2d0b0763dbabdd67798512411de4cdcf9431a1feb60fd9
+  Status: Downloaded newer image for hello-world:latest
+  52af64b1a65e3270cd525095974d70538fa9cf382a16123972312b72e858f57e
+  ubuntu@docker-node1:~$
+  ubuntu@docker-node1:~$
+  ubuntu@docker-node1:~$ ovs-vsctl --version
+  ovs-vsctl (Open vSwitch) 2.5.0
+  Compiled Mar 10 2016 14:16:49
+  DB Schema 7.12.1
+  ubuntu@docker-node1:~$
 
 You can play with docker now ~~
