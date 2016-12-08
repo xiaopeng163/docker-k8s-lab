@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Docker Kubernetes Lab Handbook
-==========================================
+Docker Kubernetes Lab Handbook
+==============================
 
 This handbook contains some docker and kubernetes lab tutorials. It will be useful if you are learning docker or kubernetes now.
 The labs in this tutorial are all well documented, include most of the detail information, steps, environments.
@@ -12,7 +12,8 @@ The labs in this tutorial are all well documented, include most of the detail in
 This is not a docker kubernetes Documentation, just a lab guide, please go to their online documentation sites for more details about
 what is docker or kubernetes is and how does it work.
 
-Contents:
+Table of Contents
+-----------------
 
 .. toctree::
    :maxdepth: 2
