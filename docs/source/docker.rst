@@ -12,6 +12,7 @@ Docker
    docker/customize-bridge
    docker/create-new-bridge
    docker/host-network
+   docker/docker-etcd
    docker/docker-ovs
    docker/docker-calico
    docker/docker-flannel

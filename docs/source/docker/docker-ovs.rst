@@ -1,4 +1,4 @@
-Multi-Host Networking Overlay with Open vSwitch
+Multi-Host Overlay Networking with Open vSwitch
 ===============================================
 
 .. note::
