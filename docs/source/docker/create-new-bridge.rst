@@ -1,7 +1,7 @@
 Create a new bridge network and connect with container
 =======================================================
 
-Use ``docker network`` command to createa a new bridge network [#f1]_.
+Use ``docker network -d bridge`` command to createa a new bridge network [#f1]_.
 
 .. code-block:: bash
 

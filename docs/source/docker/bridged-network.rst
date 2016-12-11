@@ -287,8 +287,23 @@ the IPv4 pool and assign it to the endpoint interface IPv4 address.
 NAT
 ~~~
 
-Container in bridge network mode can access the external network through ``NAT`` which configured by ``iptables``. From the
-docker host, we can see:
+Container in bridge network mode can access the external network through ``NAT`` which configured by ``iptables``.
+
+Inside the container:
+
+.. code-block:: bash
+
+  # ping www.google.com
+  PING www.google.com (172.217.27.100) 56(84) bytes of data.
+  64 bytes from sin11s04-in-f4.1e100.net (172.217.27.100): icmp_seq=1 ttl=61 time=99.0 ms
+  64 bytes from sin11s04-in-f4.1e100.net (172.217.27.100): icmp_seq=2 ttl=61 time=108 ms
+  64 bytes from sin11s04-in-f4.1e100.net (172.217.27.100): icmp_seq=3 ttl=61 time=110 ms
+  ^C
+  --- www.google.com ping statistics ---
+  3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+  rtt min/avg/max/mdev = 99.073/106.064/110.400/4.990 ms
+
+From the docker host, we can see:
 
 .. code-block:: bash
 
