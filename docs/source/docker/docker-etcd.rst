@@ -3,11 +3,23 @@ Multi-Host Overlay Networking with Etcd
 
 Docker has a build-in overlay networking driver, and it is used by default when docker running in swarm mode [#f1]_.
 
+.. note::
+
+  The Docker Overlay driver has existed since Docker Engine 1.9, and an external K/V store was required to manage state for the network. Docker Engine 1.12 integrated the control plane state into Docker Engine so that an external store is no longer required. 1.12 also introduced several new features including encryption and service load balancing. Networking features that are introduced require a Docker Engine version that supports them, and using these features with older versions of Docker Engine is not supported.
+
+
+
 This lab we will not run docker in swarm mode, but use docker engine with external key-value store to do mutli-host
 overlay networking.
 
 We chose etcd [#f2]_ as our external key-value store. You can trade etcd cluster as the management plane in this multi-host
 networking.
+
+For data plane, The Docker overlay network encapsulates container traffic in a VXLAN header which allows the traffic to traverse the physical Layer 2 or Layer 3 network.
+
+.. note::
+
+  VXLAN has been a part of the Linux kernel since version 3.7, and Docker uses the native VXLAN features of the kernel to create overlay networks. The Docker overlay datapath is entirely in kernel space. This results in fewer context switches, less CPU overhead, and a low-latency, direct traffic path between applications and the physical NIC.
 
 Prepare Environment
 --------------------
@@ -265,10 +277,18 @@ Let check the connectivity.
     ubuntu@docker-node1:~$
 
 
-Analysis
---------
+Analysis [#f4]_ [#f5]_
+-----------------------
 
-more information, please go to https://www.singlestoneconsulting.com/~/media/files/whitepapers/dockernetworking2.pdf
+.. image:: _image/docker-overlay.png
+
+During overlay network creation, Docker Engine creates the network infrastructure required for overlays on each host (Create on one host,
+and through etcd sync to the other host).
+A Linux bridge is created per overlay along with its associated VXLAN interfaces. The Docker Engine intelligently instantiates overlay networks
+on hosts only when a container attached to that network is scheduled on the host. This prevents sprawl of overlay networks
+where connected containers do not exist.
+
+There are two interfaces in each container, one is for ``docker_gwbridge`` network, and the other is for ``demo`` overlay network.
 
 
 Reference
@@ -277,3 +297,5 @@ Reference
 .. [#f1] https://docs.docker.com/engine/swarm/swarm-mode/
 .. [#f2] https://github.com/coreos/etcd
 .. [#f3] https://coreos.com/etcd/docs/latest/op-guide/clustering.html
+.. [#f4] https://github.com/docker/labs/blob/master/networking/concepts/06-overlay-networks.md
+.. [#f5] https://www.singlestoneconsulting.com/~/media/files/whitepapers/dockernetworking2.pdf

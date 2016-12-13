@@ -74,6 +74,11 @@ container 2 on host 1 can not access container 1 on host 2
 Configure OVS
 --------------
 
+Install OVS:
+
+.. code-block:: bash
+
+  $ sudo apt-get install -y openvswitch-switch openvswitch-common
 
 Host 1
 ~~~~~~~
