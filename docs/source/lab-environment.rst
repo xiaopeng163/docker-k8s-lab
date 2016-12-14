@@ -10,7 +10,6 @@ For what vagrant is and how to use it with virtualbox and vmware fusion, please 
 Vagrant with two node docker engine
 -----------------------------------
 
-
 .. code-block:: bash
 
   $ git clone https://github.com/xiaopeng163/docker-k8s-lab
@@ -27,11 +26,6 @@ The first time you run ``vagrant up`` will take some time to finished creating t
 your network connection situation.
 
 It will create two ubuntu 16.04 VMs based on the base box from the internet, and provision them.
-Basically, the following software will be included:
-
-- docker
-- Open vSwitch
-
 
 We can use ``vagrant ssh`` to access each node:
 
@@ -69,11 +63,14 @@ We can use ``vagrant ssh`` to access each node:
   Status: Downloaded newer image for hello-world:latest
   52af64b1a65e3270cd525095974d70538fa9cf382a16123972312b72e858f57e
   ubuntu@docker-node1:~$
-  ubuntu@docker-node1:~$
-  ubuntu@docker-node1:~$ ovs-vsctl --version
-  ovs-vsctl (Open vSwitch) 2.5.0
-  Compiled Mar 10 2016 14:16:49
-  DB Schema 7.12.1
-  ubuntu@docker-node1:~$
+
 
 You can play with docker now ~~
+
+If you want to recovery your environment, just:
+
+.. code-block:: bash
+
+  $ vagrant halt
+  $ rm -rf .vagrant/
+  $ vagrant up
