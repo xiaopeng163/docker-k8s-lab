@@ -19,5 +19,5 @@ Docker
    docker/docker-flannel
    docker/docker-contiv
    docker/docker-machine
-   docker/docker-swarm
    docker/docker-compose
+   docker/docker-swarm
