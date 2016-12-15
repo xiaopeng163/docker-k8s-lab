@@ -21,7 +21,7 @@ Install Docker Compose
 
 There are many ways to install docker compose [#f2]_.
 
-In our two node docker engine lab environment :doc:`../lab-environment`
+In our one node docker engine lab environment :doc:`../lab-environment`
 we install docker compose as the following way in one docker host.
 
 .. code-block:: bash

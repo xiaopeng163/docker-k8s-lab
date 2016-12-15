@@ -72,5 +72,15 @@ If you want to recovery your environment, just:
 .. code-block:: bash
 
   $ vagrant halt
-  $ rm -rf .vagrant/
+  $ vagrant destroy
+  $ vagrant up
+
+
+Vagrant with one node docker engine
+-----------------------------------
+
+.. code-block:: bash
+
+  $ git clone https://github.com/xiaopeng163/docker-k8s-lab
+  $ cd $ cd docker-k8s-lab/lab/docker/single-node
   $ vagrant up
