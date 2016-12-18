@@ -1,8 +1,13 @@
 Docker Command Line Step by Step
 ================================
 
+Docker Images
+-------------
+
+Docker images can be pulled from the docker hub, or build from ``Dockerfile``.
+
 docker pull
-------------
+~~~~~~~~~~~~
 
 ``docker pull`` will pull a docker image from image registry, it's docker hub by default.
 
@@ -29,9 +34,51 @@ If the image has already on you host.
   Digest: sha256:edb984703bd3e8981ff541a5b9297ca1b81fde6e6e8094d86e390a38ebc30b4d
   Status: Image is up to date for ubuntu:14.04
 
+docker build
+~~~~~~~~~~~~
+
+Create a ``Dockerfile`` in current folder.
+
+.. code-block:: bash
+
+  $ more Dockerfile
+  FROM        ubuntu:14.04
+  MAINTAINER  xiaoquwl@gmail.com
+  RUN         apt-get update && apt-get install -y redis-server
+  EXPOSE      6379
+  ENTRYPOINT  ["/usr/bin/redis-server"]
+
+Use ``docker build`` to create a image.
+
+.. code-block:: bash
+
+  $ docker build -t xiaopeng163/redis:0.1 .
+  $ docker images
+  REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+  xiaopeng163/redis   0.1                 ccbca61a8ed4        7 seconds ago       212.4 MB
+  ubuntu              14.04               3f755ca42730        2 days ago          187.9 MB
+
+docker history
+~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  $ docker history xiaopeng163/redis:0.1
+  IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+  ccbca61a8ed4        2 minutes ago       /bin/sh -c #(nop) ENTRYPOINT ["/usr/bin/redis   0 B
+  13d13c016420        2 minutes ago       /bin/sh -c #(nop) EXPOSE 6379/tcp               0 B
+  c2675d891098        2 minutes ago       /bin/sh -c apt-get update && apt-get install    24.42 MB
+  c3035660ff0c        2 minutes ago       /bin/sh -c #(nop) MAINTAINER xiaoquwl@gmail.c   0 B
+  3f755ca42730        2 days ago          /bin/sh -c #(nop)  CMD ["/bin/bash"]            0 B
+  <missing>           2 days ago          /bin/sh -c mkdir -p /run/systemd && echo 'doc   7 B
+  <missing>           2 days ago          /bin/sh -c sed -i 's/^#\s*\(deb.*universe\)$/   1.895 kB
+  <missing>           2 days ago          /bin/sh -c rm -rf /var/lib/apt/lists/*          0 B
+  <missing>           2 days ago          /bin/sh -c set -xe   && echo '#!/bin/sh' > /u   194.6 kB
+  <missing>           2 days ago          /bin/sh -c #(nop) ADD file:b2236d49147fe14d8d   187.7 MB
+
 
 docker images
--------------
+~~~~~~~~~~~~~
 
 ``docker images`` will list all avaiable images on your local host.
 
@@ -40,12 +87,11 @@ docker images
   $ docker images
   REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
   ubuntu              14.04               aae2b63c4946        12 hours ago        187.9 MB
-  ubuntu              latest              e4415b714b62        13 days ago         128.1 MB
-  centos              7                   0584b3d2cf6d        3 weeks ago         196.5 MB
-  centos              latest              0584b3d2cf6d        3 weeks ago         196.5 MB
-  hello-world         latest              c54a2cc56cbb        5 months ago        1.848 kB
 
-Delete images
+docker rmi
+~~~~~~~~~~
+
+Remove docker images.
 
 .. code-block:: bash
 
@@ -58,8 +104,9 @@ Delete images
   Deleted: sha256:cc4264e967e293d5cc16e5def86a0b3160b7a3d09e7a458f781326cd2cecedb1
   Deleted: sha256:3181634137c4df95685d73bfbc029c47f6b37eb8a80e74f82e01cd746d0b4b66
 
-docker run
-----------
+
+Docker Containers
+-----------------
 
 
 Start a container in interactive mode
@@ -117,33 +164,19 @@ Start a container in interactive mode
 Start a container in background
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: bash
-
-  $ docker run -d --name test3 ubuntu:14.04
-  92848c122db630178f85ad29abc560c13b260cc0a8c63d4cbdaa01de5e3d1b42
-  $ docker ps -a
-  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
-  92848c122db6        ubuntu:14.04        "/bin/bash"              13 seconds ago      Exited (0) 12 seconds ago                       test3
-  8975cb01d142        centos:7            "/bin/bash -c 'while "   24 hours ago        Up 24 hours                                     test2
-  4fea95f2e979        centos:7            "/bin/bash -c 'while "   2 days ago          Up 2 days                                       test1
-
-
-
-docker ps
----------
-
-``docker ps`` will list all running containers, and ``docker ps -a`` will list all containers include exited.
+Start a container in background using ``xiaopeng163/redis:0.1`` image, and the name of the container is ``demo``.
+Through ``docker ps`` we can see all running Containers
 
 .. code-block:: bash
 
+  $ docker run -d --name demo xiaopeng163/redis:0.1
+  4791db4ff0ef5a1ad9ff7c405bd7705d95779b2e9209967ffbef66cbaee80f3a
   $ docker ps
-  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
-  4fea95f2e979        centos:7            "/bin/bash -c 'while "   6 days ago          Up 3 seconds                            test1
-  $ docker ps -a
-  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
-  c05d6d379459        centos:7            "/bin/bash -c 'while "   3 days ago          Exited (137) 11 hours ago                       test3
-  8975cb01d142        centos:7            "/bin/bash -c 'while "   5 days ago          Exited (137) 3 days ago                         test2
-  4fea95f2e979        centos:7            "/bin/bash -c 'while "   6 days ago          Up 6 seconds                                    test1
+  CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS              PORTS               NAMES
+  4791db4ff0ef        xiaopeng163/redis:0.1   "/usr/bin/redis-serve"   5 seconds ago       Up 4 seconds        6379/tcp            demo
+
+stop/remove containers
+~~~~~~~~~~~~~~~~~~~~~~
 
 Sometime, we want to manage multiple containers each time,  like ``start``, ``stop``, ``rm``.
 

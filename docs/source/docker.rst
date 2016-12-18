@@ -21,3 +21,5 @@ Docker
    docker/docker-machine
    docker/docker-compose
    docker/docker-swarm
+   docker/docker-swarm-service
+   docker/docker-swarm-topo
