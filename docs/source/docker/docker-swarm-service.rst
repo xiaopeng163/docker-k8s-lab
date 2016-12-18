@@ -8,7 +8,7 @@ create a service and try to scale it.
 Create a Swarm Cluster
 ----------------------
 
-Based on the lab :doc:`docke-swarm`, create four docker machines and init a swarm cluster.
+Based on the lab :doc:`docker-swarm`, create four docker machines and init a swarm cluster.
 
 .. code-block:: bash
 
@@ -63,7 +63,7 @@ Scale a Service
 
 We can use ``docker service scale`` to scale a service.
 
-..code-block:: bash
+.. code-block:: bash
 
   docker@swarm-manager:~$ docker service scale myapp=2
   myapp scaled to 2
