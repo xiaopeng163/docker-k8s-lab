@@ -5,6 +5,8 @@ Docker
    :maxdepth: 1
 
    docker/docker-engine
+   docker/docker-machine
+   docker/docker-machine-aws
    docker/docker-cli
    docker/docker-network
    docker/netns
@@ -18,7 +20,6 @@ Docker
    docker/docker-calico
    docker/docker-flannel
    docker/docker-contiv
-   docker/docker-machine
    docker/docker-compose
    docker/docker-swarm
    docker/docker-swarm-service
