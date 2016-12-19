@@ -21,6 +21,7 @@ Docker
    docker/docker-flannel
    docker/docker-contiv
    docker/docker-compose
+   docker/docker-compose-lb-scale
    docker/docker-swarm
    docker/docker-swarm-service
    docker/docker-swarm-topo
