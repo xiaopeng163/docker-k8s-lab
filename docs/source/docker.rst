@@ -24,4 +24,5 @@ Docker
    docker/docker-compose-lb-scale
    docker/docker-swarm
    docker/docker-swarm-service
+   docker/docker-swarm-lb-scale
    docker/docker-swarm-topo

@@ -1,5 +1,5 @@
-Create a Cluster of Docker Engines in Swarm Mode
-================================================
+Swarm Mode: Create a Docker Swarm Cluster
+=========================================
 
 Docker swarm mode requires docker engine 1.12 or higher. This lab will need two docker engine host created by docker machine.
 
