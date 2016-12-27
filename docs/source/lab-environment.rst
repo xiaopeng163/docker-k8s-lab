@@ -13,7 +13,7 @@ Vagrant with two node docker engine
 .. code-block:: bash
 
   $ git clone https://github.com/xiaopeng163/docker-k8s-lab
-  $ cd $ cd docker-k8s-lab/lab/docker/multi-node
+  $ cd docker-k8s-lab/lab/docker/multi-node/vagrant
   $ vagrant up
   Bringing machine 'docker-node1' up with 'virtualbox' provider...
   Bringing machine 'docker-node2' up with 'virtualbox' provider...

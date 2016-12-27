@@ -5,3 +5,4 @@ Kubernetes
    :maxdepth: 1
 
    kubernetes/install
+   kubernetes/kubeadm
