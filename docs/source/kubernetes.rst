@@ -6,3 +6,4 @@ Kubernetes
 
    kubernetes/install
    kubernetes/kubeadm
+   kubernetes/stepbystep
