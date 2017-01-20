@@ -11,7 +11,7 @@ Vagrant.require_version ">= 1.6.0"
 
 boxes = [
     {
-        :name => "docker-node1",
+        :name => "docker-host",
         :eth1 => "192.168.205.10",
         :mem => "1024",
         :cpu => "1"
