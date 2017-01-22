@@ -7,7 +7,7 @@ are using Mac:
 .. code-block:: bash
 
   $ docker-machine -v
-  docker-machine version 0.8.2, build e18a919
+  docker-machine version 0.9.0, build 15fd4c7
 
 
 If you are using other OS and want to install docker machine, please go to https://docs.docker.com/machine/install-machine/ for more details.
