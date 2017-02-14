@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: mysql-slave
+  labels:
+    name: mysql-slave
+spec:
+  replicas: 1
+  selector:
+    name: mysql-slave
+  template:
+    metadata:
+      labels:
+        name: mysql-slave
+    spec:
+      containers:
+        - name: slave
+          image: paulliu/mysql-slave:0.1
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "test"
+            - name: MYSQL_REPLICATION_USER
+              value: 'demo'
+            - name: MYSQL_REPLICATION_PASSWORD
+              value: 'demo'
