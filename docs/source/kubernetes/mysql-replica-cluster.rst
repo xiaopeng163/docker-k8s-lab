@@ -55,8 +55,98 @@ After ``vagrant up``, you can check the environment by these commands:
 3. Prepare MySQL Docker Image
 ------------------------------
 
-In the tuturial, we will use two Docker images from the Docker Hub, they are ``paulliu/mysql-master:0.1`` for master node and
-``paulliu/mysql-slave:0.1`` for slave node.
+3.1 Steps to Setup MySQL Replication Cluster
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+According to the offical documentation [#f3]_, the basic configuration for a replication cluster include Master node configuration and
+Replication node configuration.
+
+For Master configuration, we will edit the MySQL config file like this:
+
+.. code-block:: bash
+
+  [mysqld]
+  log-bin=mysql-bin
+  server-id=1
+
+Then create a user and password for replication. Each slave will use this user to connect to the master. For example:
+
+.. code-block:: bash
+
+  mysql> CREATE USER 'repl'@'%.mydomain.com' IDENTIFIED BY 'slavepass';
+  mysql> GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%.mydomain.com';
+
+The last step is setup the replication node, we also need edit the config file.
+
+.. code-block:: bash
+
+  [mysqld]
+  log-bin=mysql-bin
+  server-id=2
+
+And do some configuration on slave to allow it communicate with the master.
+
+.. code-block:: bash
+
+  mysql> CHANGE MASTER TO
+      ->     MASTER_HOST='master_host_name',
+      ->     MASTER_USER='replication_user_name',
+      ->     MASTER_PASSWORD='replication_password',
+      ->     MASTER_LOG_FILE='recorded_log_file_name',
+      ->     MASTER_LOG_POS=recorded_log_position;
+
+3.2 Move all to Docker
+~~~~~~~~~~~~~~~~~~~~~~~
+
+What we will do now is moving all the steps above into Docker file,  we can do that based on the offical MySQL Docker image [#f4]_.
+
+**For Master:**
+
+Edit ``Dockerfile`` [#f5]_, add the following lines:
+
+.. code-block:: bash
+
+  RUN sed -i '/\[mysqld\]/a server-id=1\nlog-bin' /etc/mysql/mysql.conf.d/mysqld.cnf
+
+Edit ``docker-entrypoint.sh`` [#f6]_ file to create a user and password for replication:
+
+.. code-block:: bash
+
+  echo "CREATE USER '$MYSQL_REPLICATION_USER'@'%' IDENTIFIED BY '$MYSQL_REPLICATION_PASSWORD' ;" | "${mysql[@]}"
+  echo "GRANT REPLICATION SLAVE ON *.* TO '$MYSQL_REPLICATION_USER'@'%' IDENTIFIED BY '$MYSQL_REPLICATION_PASSWORD' ;" | "${mysql[@]}"
+  echo 'FLUSH PRIVILEGES ;' | "${mysql[@]}"
+
+We use environment variables ``MYSQL_REPLICATION_USER`` and ``MYSQL_REPLICATION_PASSWORD`` for user and password configuration.
+These environment variables will be set when create pod in kubernetes.
+
+**For Salve:**
+
+Edit ``Dockerfile``, add the following lines:
+
+.. code-block:: bash
+
+  RUN RAND="$(date +%s | rev | cut -c 1-2)$(echo ${RANDOM})" && sed -i '/\[mysqld\]/a server-id='$RAND'\nlog-bin' /etc/mysql/mysql.conf.d/mysqld.cnf
+
+The ``server-id`` use random number.
+
+Edit ``docker-entrypoint.sh`` to add master.
+
+.. code-block:: bash
+
+  echo "STOP SLAVE;" | "${mysql[@]}"
+  echo "CHANGE MASTER TO master_host='$MYSQL_MASTER_SERVICE_HOST', master_user='$MYSQL_REPLICATION_USER', master_password='$MYSQL_REPLICATION_PASSWORD' ;" | "${mysql[@]}"
+  echo "START SLAVE;" | "${mysql[@]}"
+
+The master host is ``MYSQL_MASTER_SERVICE_HOST`` which will be the service name of the master pod in kubernetes. More information about
+this please reference https://kubernetes.io/docs/user-guide/container-environment/
+
+At last, we can build MySQL Master image and MySQL Slave image based on their Dockerfile.
+
+.. code-block:: bash
+
+  docker build -t mysql-master:0.1 .
+  docker build -t mysql-slave:0.1 .
+
 
 4. Deploy to Kubernetes
 -----------------------
@@ -89,7 +179,7 @@ and service are:
         spec:
           containers:
             - name: master
-              image: paulliu/mysql-master:0.1
+              image: mysql-master:0.1
               ports:
                 - containerPort: 3306
               env:
@@ -160,7 +250,7 @@ Just like the master node, we will use two yaml files to create replication cont
         spec:
           containers:
             - name: slave
-              image: paulliu/mysql-slave:0.1
+              image: mysql-slave:0.1
               ports:
                 - containerPort: 3306
               env:
@@ -391,8 +481,57 @@ Now we have one MySQL master pod and one MySQL slave pod. we can do some scaling
 
 You can see it's creating now, after few time, the nodes will be ready and we can enter one of them to check the MySQL data synchronization.
 
+5.4 MySQL data Persistent
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In production environment, we should configure volume mount for MySQL data persistent, the yaml file for creating replication
+controller is like below:
+
+.. code-block:: bash
+
+  apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    name: mysql-master
+    labels:
+      name: mysql-master
+  spec:
+    replicas: 1
+    selector:
+      name: mysql-master
+    template:
+      metadata:
+        labels:
+          name: mysql-master
+      spec:
+        containers:
+          - name: master
+            image: paulliu/mysql-master:0.1
+            ports:
+              - containerPort: 3306
+            volumeMounts:
+              - name: mysql-data
+                mountPath: /var/lib/mysql
+            env:
+              - name: MYSQL_ROOT_PASSWORD
+                value: "test"
+              - name: MYSQL_REPLICATION_USER
+                value: 'demo'
+              - name: MYSQL_REPLICATION_PASSWORD
+                value: 'demo'
+        volumes:
+          - name: mysql-data
+            hostPath:
+              path: /var/lib/mysql
+
+The Mount path ``/var/lib/mysql`` is just the same as defined in ``Dockerfile`` [#f5]_.
+
 6. Reference
 -------------
 
 .. [#f1] https://dev.mysql.com/doc/refman/5.7/en/replication.html
 .. [#f2] https://www.vagrantup.com/
+.. [#f3] https://dev.mysql.com/doc/refman/5.7/en/replication-howto.html
+.. [#f4] https://github.com/docker-library/mysql/tree/master/5.7
+.. [#f5] https://github.com/docker-library/mysql/blob/master/5.7/Dockerfile
+.. [#f6] https://github.com/docker-library/mysql/blob/master/5.7/docker-entrypoint.sh

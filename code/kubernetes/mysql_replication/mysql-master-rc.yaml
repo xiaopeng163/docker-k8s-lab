@@ -18,6 +18,9 @@ spec:
           image: paulliu/mysql-master:0.1
           ports:
             - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: "test"
@@ -25,3 +28,7 @@ spec:
               value: 'demo'
             - name: MYSQL_REPLICATION_PASSWORD
               value: 'demo'
+      volumes:
+        - name: mysql-data
+          hostPath:
+            path: /var/lib/mysql
