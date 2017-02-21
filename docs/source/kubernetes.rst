@@ -8,4 +8,3 @@ Kubernetes
    kubernetes/minikube
    kubernetes/kubeadm
    kubernetes/stepbystep
-   kubernetes/mysql-replica-cluster
