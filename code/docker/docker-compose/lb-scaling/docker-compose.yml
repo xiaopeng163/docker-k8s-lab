@@ -1,0 +1,30 @@
+version: "2"
+
+services:
+  web:
+    build: .
+    ports: ["8080"]
+    links:
+      - redis
+    networks:
+      - compose-demo-bridge
+
+  redis:
+    image: redis
+    ports: ["6379"]
+    networks:
+      - compose-demo-bridge
+
+  lb:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - web
+    networks:
+      - compose-demo-bridge
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+
+networks:
+  compose-demo-bridge:
