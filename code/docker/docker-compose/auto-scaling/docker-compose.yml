@@ -1,0 +1,8 @@
+web:
+  image: 'jwilder/whoami'
+lb:
+  image: 'dockercloud/haproxy:latest'
+  links:
+    - web
+  ports:
+    - '80:80'

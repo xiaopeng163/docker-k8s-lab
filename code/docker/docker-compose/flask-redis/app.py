@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import Flask
 from redis import Redis
 import os
 import socket
