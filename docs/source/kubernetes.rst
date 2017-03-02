@@ -4,7 +4,7 @@ Kubernetes
 .. toctree::
    :maxdepth: 1
 
-   kubernetes/kuberntes-aws
+   kubernetes/kubernetes-aws
    kubernetes/minikube
    kubernetes/kubeadm
    kubernetes/stepbystep
