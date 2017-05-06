@@ -1,0 +1,30 @@
+version: "3"
+services:
+  web:
+    image: xiaopeng163/docker-flask-demo:2.0
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "80:5000"
+    depends_on:
+      - redis
+    networks:
+      - compose-demo-bridge
+
+  redis:
+    image: redis
+    ports: ["6379"]
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - compose-demo-bridge
+
+networks:
+  compose-demo-bridge:
