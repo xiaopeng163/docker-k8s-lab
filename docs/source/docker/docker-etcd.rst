@@ -9,7 +9,7 @@ Docker has a build-in overlay networking driver, and it is used by default when 
 
 
 
-This lab we will not run docker in swarm mode, but use docker engine with external key-value store to do mutli-host
+This lab we will not run docker in swarm mode, but use docker engine with external key-value store to do multi-host
 overlay networking.
 
 We chose etcd [#f2]_ as our external key-value store. You can trade etcd cluster as the management plane in this multi-host
