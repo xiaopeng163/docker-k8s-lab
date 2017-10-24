@@ -15,7 +15,7 @@ Create a docker machine
   ➜  ~ docker-machine create --driver amazonec2 --amazonec2-region us-west-1 \
                              --amazonec2-zone a --amazonec2-vpc-id vpc-32c73756 \
                              --amazonec2-subnet-id subnet-16c84872 \
-                             --amazonec2-ami ami-7790c617 \
+                             --amazonec2-ami ami-1b17257b \
                              --amazonec2-access-key $AWS_ACCESS_KEY_ID \
                              --amazonec2-secret-key $AWS_SECRET_ACCESS_KEY \
                              aws-swarm-manager
