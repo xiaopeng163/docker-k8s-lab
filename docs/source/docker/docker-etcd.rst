@@ -144,9 +144,30 @@ What happened? It's done through ``etcd``. Check etcd key-value on node2
   /docker/nodes/192.168.205.10:2375
   ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl ls /docker/network/v1.0/network
   /docker/network/v1.0/network/3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9
-  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /docker/network/v1.0/network/3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9
-  {"addrSpace":"GlobalDefault","enableIPv6":false,"generic":{"com.docker.network.enable_ipv6":false,"com.docker.network.generic":{}},"id":"3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9","inDelete":false,"ingress":false,"internal":false,"ipamOptions":{},"ipamType":"default","ipamV4Config":"[{\"PreferredPool\":\"\",\"SubPool\":\"\",\"Gateway\":\"\",\"AuxAddresses\":null}]","ipamV4Info":"[{\"IPAMData\":\"{\\\"AddressSpace\\\":\\\"GlobalDefault\\\",\\\"Gateway\\\":\\\"10.0.0.1/24\\\",\\\"Pool\\\":\\\"10.0.0.0/24\\\"}\",\"PoolID\":\"GlobalDefault/10.0.0.0/24\"}]","labels":{},"name":"demo","networkType":"overlay","persist":true,"postIPv6":false,"scope":"global"}
-
+  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /docker/network/v1.0/network/3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9 | jq .
+  {
+    "addrSpace": "GlobalDefault",
+    "enableIPv6": false,
+    "generic": {
+      "com.docker.network.enable_ipv6": false,
+      "com.docker.network.generic": {}
+    },
+    "id": "3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9",
+    "inDelete": false,
+    "ingress": false,
+    "internal": false,
+    "ipamOptions": {},
+    "ipamType": "default",
+    "ipamV4Config": "[{\"PreferredPool\":\"\",\"SubPool\":\"\",\"Gateway\":\"\",\"AuxAddresses\":null}]",
+    "ipamV4Info": "[{\"IPAMData\":\"{\\\"AddressSpace\\\":\\\"GlobalDefault\\\",\\\"Gateway\\\":\\\"10.0.0.1/24\\\",\\\"Pool\\\":\\\"10.0.0.0/24\\\"}\",\"PoolID\":\"GlobalDefault/10.0.0.0/24\"}]",
+    "labels": {},
+    "name": "demo",
+    "networkType": "overlay",
+    "persist": true,
+    "postIPv6": false,
+    "scope": "global"
+  }
+  
 The network ID ``3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9`` is exactly the ID you see from ``docker network ls``.
 So all the information is synchronized by etcd.
 
@@ -230,9 +251,42 @@ Through etcd
 
 .. code-block:: bash
 
-  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /docker/network/v1.0/endpoint/3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9/57aec8a581a7f664faad9bae6c48437289b0376512bbfe9a9ecb9d18496b3c61
-  {"anonymous":false,"disableResolution":false,"ep_iface":{"addr":"10.0.0.2/24","dstPrefix":"eth","mac":"02:42:0a:00:00:02","routes":null,"srcName":"veth9337a4a","v4PoolID":"GlobalDefault/10.0.0.0/24","v6PoolID":""},"exposed_ports":[],"generic":{"com.docker.network.endpoint.exposedports":[],"com.docker.network.portmap":[]},"id":"57aec8a581a7f664faad9bae6c48437289b0376512bbfe9a9ecb9d18496b3c61","ingressPorts":null,"joinInfo":{"StaticRoutes":null,"disableGatewayService":false},"locator":"192.168.205.10","myAliases":["a95a9466331d"],"name":"test1","sandbox":"fb8288acaf2169ff12230293dea6ec508387c3fb06ade120ba2c4283b3e88a6b","svcAliases":null,"svcID":"","svcName":"","virtualIP":"\u003cnil\u003e"}
-  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$
+  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /docker/network/v1.0/endpoint/3d430f3338a2c3496e9edeccc880f0a7affa06522b4249497ef6c4cd6571eaa9/57aec8a581a7f664faad9bae6c48437289b0376512bbfe9a9ecb9d18496b3c61 | jq .
+  {
+    "anonymous": false,
+    "disableResolution": false,
+    "ep_iface": {
+      "addr": "10.0.0.2/24",
+      "dstPrefix": "eth",
+      "mac": "02:42:0a:00:00:02",
+      "routes": null,
+      "srcName": "veth9337a4a",
+      "v4PoolID": "GlobalDefault/10.0.0.0/24",
+      "v6PoolID": ""
+    },
+    "exposed_ports": [],
+    "generic": {
+      "com.docker.network.endpoint.exposedports": [],
+      "com.docker.network.portmap": []
+    },
+    "id": "57aec8a581a7f664faad9bae6c48437289b0376512bbfe9a9ecb9d18496b3c61",
+    "ingressPorts": null,
+    "joinInfo": {
+      "StaticRoutes": null,
+      "disableGatewayService": false
+    },
+    "locator": "192.168.205.10",
+    "myAliases": [
+      "a95a9466331d"
+    ],
+    "name": "test1",
+    "sandbox": "fb8288acaf2169ff12230293dea6ec508387c3fb06ade120ba2c4283b3e88a6b",
+    "svcAliases": null,
+    "svcID": "",
+    "svcName": "",
+    "virtualIP": "<nil>"
+  }
+    ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$
 
 The ip and mac address is container test1.
 
