@@ -37,7 +37,7 @@ We use the docker hosts created by docker-machine on Amazon AWS.
 Create a new Bridge Network
 ---------------------------
 
-Use ``docker network create -d bridge`` command to createa a new bridge network [#f1]_.
+Use ``docker network create -d bridge NETWORK_NAME`` command to create a new bridge network [#f1]_.
 
 .. code-block:: bash
 
@@ -96,7 +96,7 @@ Use ``docker network create -d bridge`` command to createa a new bridge network 
 Create a Container connected with new Bridge
 ---------------------------------------------
 
-Create a container and connecte with the ``my-bridge`` network.
+Create a container connected with the ``my-bridge`` network.
 
 .. code-block:: bash
 
