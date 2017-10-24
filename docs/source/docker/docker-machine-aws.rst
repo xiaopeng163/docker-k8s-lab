@@ -106,11 +106,11 @@ Set the docker environment in local host.
    Experimental: true
 
   Server:
-   Version:      1.12.5
-   API version:  1.24
-   Go version:   go1.6.4
-   Git commit:   7392c3b
-   Built:        Fri Dec 16 02:30:42 2016
+   Version:      17.10.0-ce
+   API version:  1.33
+   Go version:   go1.8.3
+   Git commit:   f4ffd25
+   Built:        Tue Oct 17 19:02:56 2017
    OS/Arch:      linux/amd64
   ➜  ~
 
