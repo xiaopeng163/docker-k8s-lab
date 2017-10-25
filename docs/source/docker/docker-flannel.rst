@@ -60,7 +60,28 @@ flannel will read the configuration from etcd ``/coreos.com/network/config`` by 
 configuration to etcd cluster, the configuration is JSON format like that:
 
 .. code-block:: json
+  ubuntu@docker-node1:~$ cat > flannel-network-config.json
+  {
+      "Network": "10.0.0.0/8",
+      "SubnetLen": 20,
+      "SubnetMin": "10.10.0.0",
+      "SubnetMax": "10.99.0.0",
+      "Backend": {
+          "Type": "vxlan",
+          "VNI": 100,
+          "Port": 8472
+      }
+  }
+  EOF
 
+For the configuration keys meaning, please go to https://github.com/coreos/flannel for more information. Set the configuration
+on host1:
+
+.. code-block:: bash
+
+
+  ubuntu@docker-node1:~$ cd etcd-v3.0.12-linux-amd64/
+  ubuntu@docker-node1:~/etcd-v3.0.12-linux-amd64$ ./etcdctl set /coreos.com/network/config < ../flannel-network-config.json
   {
       "Network": "10.0.0.0/8",
       "SubnetLen": 20,
@@ -73,27 +94,28 @@ configuration to etcd cluster, the configuration is JSON format like that:
       }
   }
 
-For the configuration keys meaning, please go to https://github.com/coreos/flannel for more information. Set the configuration
-on host1:
-
-.. code-block:: bash
-
-
-  ubuntu@docker-node1:~$ cd etcd-v3.0.12-linux-amd64/
-  ubuntu@docker-node1:~/etcd-v3.0.12-linux-amd64$ ./etcdctl set /coreos.com/network/config '{"Network": "10.0.0.0/8", "SubnetLen": 20, "SubnetMin": "10.10.0.0","SubnetMax": "10.99.0.0","Backend": {"Type": "vxlan","VNI": 100,"Port": 8472}}'
-  {"Network": "10.0.0.0/8", "SubnetLen": 20, "SubnetMin": "10.10.0.0","SubnetMax": "10.99.0.0","Backend": {"Type": "vxlan","VNI": 100,"Port": 8472}}
-
 Check the configuration on host2:
 
 .. code-block:: bash
 
-  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /coreos.com/network/config
-  {"Network": "10.0.0.0/8", "SubnetLen": 20, "SubnetMin": "10.10.0.0","SubnetMax": "10.99.0.0","Backend": {"Type": "vxlan","VNI": 100,"Port": 8472}}
-
-Start flannel on host2:
+  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /coreos.com/network/config | jq .
+  {
+    "Network": "10.0.0.0/8",
+    "SubnetLen": 20,
+    "SubnetMin": "10.10.0.0",
+    "SubnetMax": "10.99.0.0",
+    "Backend": {
+      "Type": "vxlan",
+      "VNI": 100,
+      "Port": 8472
+    }
+  }
+  
+Start flannel on host1:
 
 .. code-block:: bash
 
+  ubuntu@docker-node1:~$ cd
   ubuntu@docker-node1:~$ nohup sudo ./flanneld -iface=192.168.205.10 &
 
 After that a new interface ``flannel.100`` will be list on the host:
@@ -114,9 +136,17 @@ Before we start flannel on host2, we can check etcd configuration on host2:
 
 .. code-block:: bash
 
-  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /coreos.com/network/subnets/10.15.64.0-20
-  {"PublicIP":"192.168.205.10","BackendType":"vxlan","BackendData":{"VtepMAC":"82:53:2e:6a:a9:43"}}
-
+  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl ls /coreos.com/network/subnets
+  /coreos.com/network/subnets/10.15.64.0-20
+  ubuntu@docker-node2:~/etcd-v3.0.12-linux-amd64$ ./etcdctl get /coreos.com/network/subnets/10.15.64.0-20 | jq .
+  {
+    "PublicIP": "192.168.205.10",
+    "BackendType": "vxlan",
+    "BackendData": {
+      "VtepMAC": "82:53:2e:6a:a9:43"
+    }
+  }
+  
 This is the flannel backend information on host1.
 
 Start flannel on host2
@@ -217,7 +247,7 @@ Container test1 on host1 ping container test2 on host2
   64 bytes from 10.13.48.2: seq=0 ttl=62 time=1.347 ms
   64 bytes from 10.13.48.2: seq=1 ttl=62 time=0.430 ms
 
-Through ``tcpdump`` we can confirm the vxlan tunnel.
+Through ``sudo tcpdump -i enp0s8 -n not port 2380`` we can confirm the vxlan tunnel.
 
 .. code-block:: bash
 

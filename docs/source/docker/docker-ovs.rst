@@ -139,20 +139,22 @@ Almost do the same thing on host 2.
     ubuntu@docker-node2:~$ sudo ip link set veth1 up
     ubuntu@docker-node2:~$ sudo ip link set veth0 up
 
-GER tunnel between host 1 and host 2
+GRE tunnel between host 1 and host 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 on host 1
 
 .. code-block:: bash
 
-    ubuntu@docker-node1:~$ sudo ovs-vsctl add-port br-int gre0 -- set interface gre0 type=gre options:remote_ip=192.168.205.11
+    ubuntu@docker-node1:~$ sudo ovs-vsctl add-port br-int gre0 -- \
+    set interface gre0 type=gre options:remote_ip=192.168.205.11
 
 on host 1
 
 .. code-block:: bash
 
-    ubuntu@docker-node2:~$ sudo ovs-vsctl add-port br-int gre0 -- set interface gre0 type=gre options:remote_ip=192.168.205.10
+    ubuntu@docker-node2:~$ sudo ovs-vsctl add-port br-int gre0 -- \
+    set interface gre0 type=gre options:remote_ip=192.168.205.10
 
 The connection between ovs bridge and docker0 bridge
 
@@ -201,7 +203,7 @@ At the same time, start ``tcpdump`` on host 1 and capture packges on the GRE sou
 
 .. code-block:: bash
 
-    ubuntu@docker-node1:~$ sudo tcpdump -i enp0s8
+    ubuntu@docker-node1:~$ sudo tcpdump -n -i enp0s8 proto gre
     tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
     listening on enp0s8, link-type EN10MB (Ethernet), capture size 262144 bytes
     14:12:17.966149 IP 192.168.205.11 > 192.168.205.10: GREv0, length 102: IP 172.17.0.2 > 172.17.0.3: ICMP echo request, id 23, seq 1, length 64
