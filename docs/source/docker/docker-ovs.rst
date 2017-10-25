@@ -139,7 +139,7 @@ Almost do the same thing on host 2.
     ubuntu@docker-node2:~$ sudo ip link set veth1 up
     ubuntu@docker-node2:~$ sudo ip link set veth0 up
 
-GER tunnel between host 1 and host 2
+GRE tunnel between host 1 and host 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 on host 1
