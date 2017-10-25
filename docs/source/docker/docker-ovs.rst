@@ -203,7 +203,7 @@ At the same time, start ``tcpdump`` on host 1 and capture packges on the GRE sou
 
 .. code-block:: bash
 
-    ubuntu@docker-node1:~$ sudo tcpdump -i enp0s8
+    ubuntu@docker-node1:~$ sudo tcpdump -n -i enp0s8 proto gre
     tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
     listening on enp0s8, link-type EN10MB (Ethernet), capture size 262144 bytes
     14:12:17.966149 IP 192.168.205.11 > 192.168.205.10: GREv0, length 102: IP 172.17.0.2 > 172.17.0.3: ICMP echo request, id 23, seq 1, length 64
