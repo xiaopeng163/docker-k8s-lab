@@ -8,6 +8,7 @@ Docker
    docker/docker-machine
    docker/docker-machine-aws
    docker/docker-cli
+   docker/docker-base-image
    docker/docker-network
    docker/netns
    docker/bridged-network
