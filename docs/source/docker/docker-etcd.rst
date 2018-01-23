@@ -63,10 +63,20 @@ Restart docker engine with cluster configuration
 
 on docker-node1
 
+if docker version < 17.09
+
 .. code-block:: bash
 
   ubuntu@docker-node1:~$ sudo service docker stop
   ubuntu@docker-node1:~$ sudo /usr/bin/docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-store=etcd://192.168.205.10:2379 --cluster-advertise=192.168.205.10:2375
+
+if docker version >= 17.09
+
+.. code-block:: bash
+
+  ubuntu@docker-node1:~$ sudo service docker stop
+  ubuntu@docker-node1:~$ sudo /usr/bin/dockerd  -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-store=etcd://192.168.205.10:2379 --cluster-advertise=192.168.205.10:2375
+
 
 On docker-node2
 
