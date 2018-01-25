@@ -7,6 +7,65 @@ Download link: https://www.vagrantup.com/downloads.html
 
 For what vagrant is and how to use it with virtualbox and vmware fusion, please reference https://www.vagrantup.com/docs/
 
+And please install git if you don't have one on your machine(https://git-scm.com/)
+
+Vagrant with one node docker engine
+-----------------------------------
+
+we will use vagrant to create one linux virtual machine and install docker automatically.
+
+.. code-block:: bash
+
+  $ git clone https://github.com/xiaopeng163/docker-k8s-lab
+  $ cd docker-k8s-lab/lab/docker/single-node
+
+There are two kinds of Linux, one is Ubuntu16.04, and one is CentOS7, please chose one, for example
+
+.. code-block:: bash
+
+  $ git clone https://github.com/xiaopeng163/docker-k8s-lab
+  $ cd docker-k8s-lab/lab/docker/single-node
+  $ cd vagrant-centos7
+  $ vagrant up
+
+``vagrant up`` will take some time to create a virtual machine, after finished, you can use ``vagrant ssh`` ssh into
+this machine. like
+
+.. code-block:: bash
+
+  $ vagrant status
+  Current machine states:
+
+  docker-host               running (virtualbox)
+
+  The VM is running. To stop this VM, you can run `vagrant halt` to
+  shut it down forcefully, or you can run `vagrant suspend` to simply
+  suspend the virtual machine. In either case, to restart it again,
+  simply run `vagrant up`.
+  $ vagrant ssh
+  Last login: Wed Jan 24 14:53:38 2018 from 10.0.2.2
+  [vagrant@docker-host ~]$ docker version
+  Client:
+  Version:	18.01.0-ce
+  API version:	1.35
+  Go version:	go1.9.2
+  Git commit:	03596f5
+  Built:	Wed Jan 10 20:07:19 2018
+  OS/Arch:	linux/amd64
+  Experimental:	false
+  Orchestrator:	swarm
+
+  Server:
+  Engine:
+    Version:	18.01.0-ce
+    API version:	1.35 (minimum version 1.12)
+    Go version:	go1.9.2
+    Git commit:	03596f5
+    Built:	Wed Jan 10 20:10:58 2018
+    OS/Arch:	linux/amd64
+    Experimental:	false
+
+
 Vagrant with two node docker engine
 -----------------------------------
 
@@ -73,14 +132,4 @@ If you want to recovery your environment, just:
 
   $ vagrant halt
   $ vagrant destroy
-  $ vagrant up
-
-
-Vagrant with one node docker engine
------------------------------------
-
-.. code-block:: bash
-
-  $ git clone https://github.com/xiaopeng163/docker-k8s-lab
-  $ cd $ cd docker-k8s-lab/lab/docker/single-node
   $ vagrant up
