@@ -8,4 +8,5 @@ make MALLOC=libc
 sudo make install
 nohup redis-server &
 
+cd ..
 sudo pip install -r requirements.txt
