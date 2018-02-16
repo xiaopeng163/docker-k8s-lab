@@ -182,6 +182,23 @@ Restart docker daemon with Flannel network configuration, execute commands as fo
 
 After restarting, the docker daemon will bind docker0 which has a new address. We can check the new configuration with ``sudo docker network inspect bridge``.
 
+Adjust iptables
+---------------
+
+Starting from Docker 1.13 default iptables policy for FORWARDING is DROP, so to make sure that containers will receive traffic from another hosts we need to adjust it:
+
+On host1:
+
+.. code-block:: bash
+
+  ubuntu@docker-node1:~$ sudo iptables -P FORWARD ACCEPT
+
+On host2:
+
+.. code-block:: bash
+
+  ubuntu@docker-node2:~$ sudo iptables -P FORWARD ACCEPT
+
 Start Containers
 ----------------
 
