@@ -96,7 +96,7 @@ You can also see this bridge as a part of a host’s network stack by using the 
 
 Because there are no containers running, the bridge ``docker0`` status is down.
 
-You can also use ``brctl`` command to get brige docker0 information
+You can also use ``brctl`` command to get bridge docker0 information
 
 .. code-block:: bash
 
@@ -213,8 +213,8 @@ After all is done, please remove ``/var/run/netns/3090``.
 External Communication
 ----------------------
 
-All containers connected with brige ``docker0`` can communicate with the external network or other containers which
-connected with the same brige.
+All containers connected with bridge ``docker0`` can communicate with the external network or other containers which
+connected with the same bridge.
 
 Let's start two containers:
 
@@ -227,7 +227,7 @@ Let's start two containers:
   8975cb01d142        centos:7            "/bin/bash -c 'while "   4 seconds ago       Up 4 seconds                            test2
   4fea95f2e979        centos:7            "/bin/bash -c 'while "   27 hours ago        Up 26 hours                             test1
 
-And from the brige ``docker0``, we can see two interfaces connected.
+And from the bridge ``docker0``, we can see two interfaces connected.
 
 .. code-block:: bash
 
