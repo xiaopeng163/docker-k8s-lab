@@ -9,7 +9,7 @@ sh get-docker.sh
 
 # start docker service
 sudo groupadd docker
-sudo gpasswd -a ubuntu docker
+sudo gpasswd -a $USER docker
 sudo service docker restart
 
 rm -rf get-docker.sh
