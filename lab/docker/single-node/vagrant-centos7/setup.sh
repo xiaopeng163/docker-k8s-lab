@@ -9,7 +9,7 @@ sh get-docker.sh
 
 # start docker service
 sudo groupadd docker
-sudo gpasswd -a vagrant docker
+sudo gpasswd -a $USER docker
 sudo systemctl start docker
 
 rm -rf get-docker.sh
