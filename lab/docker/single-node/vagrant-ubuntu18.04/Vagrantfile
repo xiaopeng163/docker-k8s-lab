@@ -13,7 +13,7 @@ boxes = [
 ]
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "ubuntu/bionic64"
 
   boxes.each do |opts|
       config.vm.define opts[:name] do |config|
