@@ -25,7 +25,7 @@ or remote (as when you use Machine to provision Dockerized hosts on cloud provid
 thought of, and are sometimes referred to as, managed “machines” [#f1]_.
 
 
-For this lab, we will use docker machine on Mac system, and create a docker host with virtualbox dirver.
+For this lab, we will use docker machine on Mac system, and create a docker host with virtualbox driver.
 
 Before we start, we can use ``ls`` command to check if there is any machine already in our host.
 
