@@ -19,7 +19,7 @@ we will use vagrant to create one linux virtual machine and install docker autom
   $ git clone https://github.com/xiaopeng163/docker-k8s-lab
   $ cd docker-k8s-lab/lab/docker/single-node
 
-There are two kinds of Linux, one is Ubuntu16.04, and one is CentOS7, please chose one, for example
+There are two kinds of Linux, one is Ubuntu18.04, and one is CentOS7, please chose one, for example
 
 .. code-block:: bash
 
@@ -76,15 +76,15 @@ Vagrant with two node docker engine
   $ vagrant up
   Bringing machine 'docker-node1' up with 'virtualbox' provider...
   Bringing machine 'docker-node2' up with 'virtualbox' provider...
-  ==> docker-node1: Importing base box 'ubuntu/xenial64'...
+  ==> docker-node1: Importing base box 'ubuntu/bionic64'...
   ==> docker-node1: Matching MAC address for NAT networking...
-  ==> docker-node1: Checking if box 'ubuntu/xenial64' is up to date...
+  ==> docker-node1: Checking if box 'ubuntu/bionic64' is up to date...
   ......
 
 The first time you run ``vagrant up`` will take some time to finished creating the virtual machine, and the time will depend on
 your network connection situation.
 
-It will create two ubuntu 16.04 VMs based on the base box from the internet, and provision them.
+It will create two ubuntu 18.04 VMs based on the base box from the internet, and provision them.
 
 We can use ``vagrant ssh`` to access each node:
 
@@ -100,7 +100,7 @@ We can use ``vagrant ssh`` to access each node:
   above with their current state. For more information about a specific
   VM, run `vagrant status NAME`.
   $ vagrant ssh docker-node1
-  Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-51-generic x86_64)
+  Welcome to Ubuntu 18.04 LTS (GNU/Linux 4.4.0-51-generic x86_64)
 
    * Documentation:  https://help.ubuntu.com
    * Management:     https://landscape.canonical.com
