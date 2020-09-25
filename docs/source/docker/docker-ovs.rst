@@ -149,7 +149,7 @@ on host 1
     ubuntu@docker-node1:~$ sudo ovs-vsctl add-port br-int gre0 -- \
     set interface gre0 type=gre options:remote_ip=192.168.205.11
 
-on host 1
+on host 2
 
 .. code-block:: bash
 
