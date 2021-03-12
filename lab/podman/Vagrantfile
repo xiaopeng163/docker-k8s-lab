@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.require_version ">= 1.6.0"
+
+boxes = [
+    {
+        :name => "docker-host",
+        :eth1 => "192.168.205.10",
+        :script => "./docker.sh"
+    },
+    {
+        :name => "podman-host",
+        :eth1 => "192.168.205.11",
+        :script => './podman.sh'
+    }
+]
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "centos/7"
+  boxes.each do |opts|
+    config.vm.define opts[:name] do |config|
+      config.vm.hostname = opts[:name]
+      config.vm.network :private_network, ip: opts[:eth1]
+      config.vm.provision "shell", privileged: false, path: opts[:script]
+    end
+  end
+end
